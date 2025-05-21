@@ -3,6 +3,10 @@ import loginSchema from "../../schemas/loginSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import axios from "axios";
+import { useDispatch } from "react-redux";
+import { setToken } from "../../store/authSlice";
+import type { AppDispatch } from "../../store/store";
+import { jwtDecode } from "jwt-decode";
 
 import LoginForm from "../formComponents/loginForm";
 
@@ -18,12 +22,25 @@ export default function Login() {
     resolver: zodResolver(loginSchema),
   });
 
+  const dispatch = useDispatch<AppDispatch>();
+
   const onSubmit = async (data: LoginValues) => {
     try {
       console.log("Sending data to API...");
       console.log("Form data:", data);
       const response = await axios.post("http://localhost:3000/auth/login", data);
-      console.log("Data sent successfully:", response.data);
+      console.log("Data sent successfully:", response.data.message);
+      console.log("Tokens received:", response.data.accesToken);
+
+      const decodedToken = jwtDecode<{ id : string }>(response.data.accesToken);
+      console.log("Decoded token:", decodedToken);
+      console.log("User ID:", decodedToken.id);
+
+      dispatch(setToken({
+        userId: decodedToken.id,
+        accessToken: response.data.accesToken,
+      }))
+
     } catch (error) {
       let errorMessage: string;
       if (axios.isAxiosError(error)) {

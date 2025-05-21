@@ -11,9 +11,10 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^5.0.1",
-    "@reduxjs/toolkit": "^2.8.1",
+    "@reduxjs/toolkit": "^2.8.2",
     "axios": "^1.9.0",
     "js-cookie": "^3.0.5",
+    "jwt-decode": "^4.0.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-hook-form": "^7.56.4",
